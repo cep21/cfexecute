@@ -1,0 +1,14 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Hello world ECS cluster"
+Resources:
+  ExampleCluster:
+    Type: AWS::ECS::Cluster
+    Description: A testing cluster
+    Properties:
+      ClusterName: Bob2
+#      use this (and your own domain) to test updates that either hang or fail
+#  SSLCert:
+#    Type: AWS::CertificateManager::Certificate
+#    Properties:
+#      DomainName: !Sub "*.example.com"
+#      ValidationMethod: DNS

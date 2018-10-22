@@ -1,0 +1,7 @@
+{
+  "ChangeSetName": "cfexecute-test",
+  "ChangeSetType": "GUESS",
+  "Description": "This is a description again",
+  "StackName": "hi",
+  "TemplateBody": {{ .JSON (.File "template.yaml") }}
+}
