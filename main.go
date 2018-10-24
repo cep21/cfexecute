@@ -171,6 +171,7 @@ func (a *Application) parseFlags() error {
 	a.flagset.StringVar(&a.changesetFilename, "changeset", "changeset.json", "Filename of the create changeset call")
 	a.flagset.DurationVar(&a.timeout, "timeout", 0, "A maximum duration the command will run")
 	a.flagset.IntVar(&a.logVerbosity, "verbosity", 1, "Higher values output more program context.  Zero just outputs the task's stderr/stdout")
+	a.flagset.BoolVar(&a.autoConfirm, "auto", false, "If true, user will not be prompted to confirm cloudformation changes")
 	a.flagset.BoolVar(&a.cleanExistingChangeset, "clean", false, "Will remove any existing changesets with this changeset's name")
 	return a.flagset.Parse(a.args)
 }
