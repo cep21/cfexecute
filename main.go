@@ -294,18 +294,24 @@ func (t *ChangeSetExecutor) waitForTerminalState(ctx context.Context, cloudforma
 			logger.Log(1, "Stack status set to %s: %s", *thisStack.StackStatus, emptyOnNil(thisStack.StackStatusReason))
 			lastStackStatus = *thisStack.StackStatus
 		}
-		terminalStatusStates := map[string]struct{}{
-			"CREATE_COMPLETE":          {},
+		// https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html
+		terminalFailureStatusStates := map[string]struct{}{
 			"CREATE_FAILED":            {},
-			"DELETE_COMPLETE":          {},
 			"DELETE_FAILED":            {},
-			"ROLLBACK_COMPLETE":        {},
 			"ROLLBACK_FAILED":          {},
-			"UPDATE_COMPLETE":          {},
+			"ROLLBACK_COMPLETE":        {},
 			"UPDATE_ROLLBACK_COMPLETE": {},
 			"UPDATE_ROLLBACK_FAILED":   {},
 		}
-		if _, exists := terminalStatusStates[emptyOnNil(thisStack.StackStatus)]; exists {
+		if _, exists := terminalFailureStatusStates[emptyOnNil(thisStack.StackStatus)]; exists {
+			return errors.Errorf("Terminal stack state failure: %s %s", emptyOnNil(thisStack.StackStatus), emptyOnNil(thisStack.StackStatusReason))
+		}
+		terminalOkStatusStates := map[string]struct{}{
+			"CREATE_COMPLETE": {},
+			"DELETE_COMPLETE": {},
+			"UPDATE_COMPLETE": {},
+		}
+		if _, exists := terminalOkStatusStates[emptyOnNil(thisStack.StackStatus)]; exists {
 			return nil
 		}
 	}
